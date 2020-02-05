@@ -1,7 +1,7 @@
 const readline = require('readline')
 const fs = require('fs')
 const path = require('path')
-const { getNode } = require('./../init/node')
+const { getNode, isNeighbor } = require('./../init/node')
 
 const nodes = []
 
@@ -49,15 +49,19 @@ function readNeighbors(map) {
                 return
             }
 
-            map[from].neighbors.push({
-                ref: map[to],
-                tie: 1
-            })
+            if (!isNeighbor(map[from], map[to])) {
+                map[from].neighbors.push({
+                    ref: map[to],
+                    tie: 1
+                })
+            }
 
-            map[to].neighbors.push({
-                ref: map[from],
-                tie: 1
-            })
+            if (!isNeighbor(map[to], map[from])) {
+                map[to].neighbors.push({
+                    ref: map[from],
+                    tie: 1
+                })
+            }
         })
 
         rl.on('close', () => resolve(true))

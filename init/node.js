@@ -7,7 +7,7 @@ class GraphNode {
      * 
      * @param {string} name 
      * @param {number[]} features 
-     * @param {Set<GraphNode>} neighbors 
+     * @param {any[]} neighbors 
      */
     constructor(name, features, neighbors) {
         this.name = name
@@ -27,7 +27,7 @@ function getNode(name, features, neighbors) {
     features = features || []
     neighbors = neighbors || []
 
-    const node = new GraphNode(name, features)
+    const node = new GraphNode(name, features, neighbors)
     
     return node
 }
@@ -68,9 +68,21 @@ function getCommonNeighbors(u, v) {
         .map(neighbor => neighbor.ref)
 }
 
+/**
+ * 返回u的邻居中是否包括节点v
+ * 
+ * @param {GraphNode} u 
+ * @param {GraphNode} v 
+ * @return {boolean}
+ */
+function isNeighbor(u, v) {
+    return u.neighbors.some(neighbor => neighbor.ref === v)
+}
+
 module.exports = {
     GraphNode, 
     getNode,
     getTie,
-    getCommonNeighbors
+    getCommonNeighbors,
+    isNeighbor
 }
