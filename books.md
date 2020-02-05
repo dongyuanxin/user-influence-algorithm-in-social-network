@@ -1,0 +1,1 @@
+几何平均数的意义：https://baike.baidu.com/item/%E5%87%A0%E4%BD%95%E5%B9%B3%E5%9D%87%E6%95%B0
