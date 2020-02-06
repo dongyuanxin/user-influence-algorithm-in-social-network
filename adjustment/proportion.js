@@ -26,9 +26,9 @@ class ProportionMatrix {
 
         const key = this.hash(u, v)
         if (this.cache[key] !== undefined) {
-            return this.cache[key]
+            return this.cache[key] || 0
         }
-
+        // 计算u和邻居节点的总相似度
         const { neighbors } = u
         let totalNeighborAffinity = 0
 
@@ -40,7 +40,7 @@ class ProportionMatrix {
         }
         
         this.cache[key] = estimateAffinity(v, u) / totalNeighborAffinity
-        return this.cache[key]
+        return this.cache[key] || 0
     }
 
     /**
