@@ -16,7 +16,10 @@ function readFeatures() {
 
         rl.on('line', (data) => {
             const words = data.split('\t')
-            const node = getNode(words[0], words.slice(1, 4))
+            const node = getNode(
+                words[0], 
+                words.slice(1, 4).map(item => parseFloat(item))
+            )
             nodes.push(node)
             map[words[0]] = node
         })

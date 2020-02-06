@@ -50,6 +50,8 @@ rl.on('line', (data) => {
 rl.on('close', () => {
     console.log('写入完成，一共', Reflect.ownKeys(map).length, '个节点')
     console.log('写入完成，一共', lineNum, '个关系')
+    rs.close()
+    ws.close()
 })
 
 ws.on('drain', () => rl.resume())
