@@ -5,7 +5,7 @@ const { getNode, GraphNode } = require('./../init/node')
 const { float2bit } = require('./../helper')
 
 const file = path.resolve(__dirname, 'pcu.csv')
-const featureFile = path.resolve(__dirname, 'pcu.features.txt')
+const featureFile = path.resolve(__dirname, 'pcu.features.mean.txt')
 
 const rl = readline.createInterface({
     input: fs.createReadStream(file, {
@@ -28,7 +28,33 @@ rl.on('close', () => {
     const names = Reflect.ownKeys(mem)
     const length = names.length
     let idx = 0
+    
+    // 计算最大值和最小值
+    let maxFollower = 0, minFollower = Number.MAX_SAFE_INTEGER
+    let maxPost = 0, minPost = Number.MAX_SAFE_INTEGER
+    names.forEach(name => {
+        const node = mem[name]
+        const features = node.features
+        maxFollower = Math.max(maxFollower, features[0])
+        minFollower = Math.min(minFollower, features[0])
 
+        maxPost = Math.max(maxPost, features[1])
+        minPost = Math.min(minPost, features[1])
+    })
+
+    // 计算max-min scale
+    const diffFollower = maxFollower - minFollower
+    const diffPost = maxPost - minPost
+    names.forEach(name => {
+        const node = mem[name]
+        const features = node.features 
+        features[0] = Math.max((features[0] - minFollower) / diffFollower, 0.001)
+        features[0] = Math.floor(Math.round(features[0] * 1000)) /100
+        features[1] = Math.max((features[1] - minPost) / diffPost, 0.001)
+        features[1] = Math.floor(Math.round(features[1] * 1000)) /100
+
+    })
+    
     fs.open(featureFile, 'w', (err, fd) => {
         if (err) {
             console.log('打开文件出错')
@@ -55,37 +81,6 @@ rl.on('close', () => {
             })
         }
     })
-    
-    // let maxFollower = 0, minFollower = Number.MAX_SAFE_INTEGER
-    // let maxPost = 0, minPost = Number.MAX_SAFE_INTEGER
-    // names.forEach(name => {
-    //     const node = mem[name]
-    //     const features = node.features
-    //     maxFollower = Math.max(maxFollower, features[0])
-    //     minFollower = Math.min(minFollower, features[0])
-
-    //     maxPost = Math.max(maxPost, features[1])
-    //     minPost = Math.min(minPost, features[1])
-    //     console.log(features)
-    // })
-
-    // const diffFollower = maxFollower - minFollower
-    // const diffPost = maxPost - minPost
-    // let times = 0
-    // names.forEach(name => {
-    //     const node = mem[name]
-    //     const features = node.features 
-    //     features[0] = float2bit((features[0] - minFollower) / diffFollower)
-    //     features[1] = float2bit((features[1] - minPost) / diffPost)
-    //     if (features[0] > 0.1 || features[1] > 0.1) {
-    //         console.log(features)
-    //         times++
-    //     }
-    //     // console.log(features)
-    // })
-    // console.log(times)
-    // console.log(maxFollower, maxPost, minFollower, minPost)
-
 })
 
 /**
