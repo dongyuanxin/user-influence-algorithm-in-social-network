@@ -1,0 +1,11 @@
+{
+  "name": "social-network-node-influence-algorithm",
+  "version": "1.0.0",
+  "description": "The algorithm to calc node influence in social network . 计算社交网络中节点影响力算法.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "DongYuanxin",
+  "license": "ISC"
+}
