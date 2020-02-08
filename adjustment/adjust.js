@@ -37,20 +37,20 @@ function adjust(nodes, maxSteps = 1000, alpha = 1e-4) {
     // 计算初始总影响力
     let initTotal = 0
     for (const node of nodes) {
-        initTotal += initWeight(node)
+        const w = initWeight(node)
+        initTotal += w
     }
+    console.log('初始总影响力计算完成', initTotal)
 
+    // 优化后
     // 遍历计算传递比例矩阵，并且缓存P矩阵(类内部实现)
     for (let i = 0; i < num; ++i) {
         const { neighbors } = nodes[i]
         for (const neighbor of neighbors) {
             pMatrix.calc(nodes[i], neighbor.ref)
         }
-
-        console.log('debug 3', '第',i,'个节点')
     }
-
-    console.log('debug 2')
+    console.log('分配比例计算完成')
 
     // 第一次迭代过程，初始影响力使用 weight
     const initCache = {}
@@ -66,12 +66,13 @@ function adjust(nodes, maxSteps = 1000, alpha = 1e-4) {
 
         initCache[node.name] = impact
     }
-    // console.log(initCache)
+    console.log('第一次迭代结果计算完成')
 
     let steps = 1 // 迭代次数
     let preCache = initCache // 上次迭代的结果
+    let lastP = 0 // 上次的平均变化率
     while (steps++ < maxSteps) {
-        console.log('steps:', steps)
+        // console.log('steps:', steps)
         const cache = {}
         for (const node of nodes) {
             const { neighbors } = node
@@ -93,10 +94,12 @@ function adjust(nodes, maxSteps = 1000, alpha = 1e-4) {
             total += cache[name]
         }
 
-        if (Math.abs(total - initTotal) / num < alpha) {
-            // console.log(steps)
+        let nowP = Math.abs(total - initTotal) / num
+        // console.log('变化率：', lastP, '->', nowP, '; 差别是：', Math.abs(nowP - lastP))
+        if (Math.abs(nowP - lastP) <= alpha) {
             break
         }
+        lastP = nowP
     }
     
     return preCache
