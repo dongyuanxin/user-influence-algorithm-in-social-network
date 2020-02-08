@@ -3,7 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const { genRandom } = require('./../helper')
 
-const num = 100000
+const num = 75000
 
 const fromPath = path.resolve(__dirname, 'uci.features.txt')
 const toPath = path.resolve(__dirname, `uci.features.${num}.txt`)

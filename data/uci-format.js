@@ -4,9 +4,10 @@ const path = require('path')
 const { getNode, isNeighbor } = require('./../init/node')
 
 const nodes = []
+const num = 100000
 
 function readFeatures() {
-    const file = path.resolve(__dirname, 'uci.features.txt')
+    const file = path.resolve(__dirname, `uci.features.${num}.txt`)
     const map = {} // 保存了 id -> 节点 的映射关系
 
     return new Promise((resolve) => {
@@ -36,6 +37,7 @@ function readFeatures() {
  */
 function readNeighbors(map) {
     const file = path.resolve(__dirname, 'uci.txt')
+    let line = 0
 
     return new Promise((resolve) => {
         const rl = readline.createInterface({
@@ -51,6 +53,7 @@ function readNeighbors(map) {
             if (!map[from] || !map[to]) {
                 return
             }
+            ++line
 
             if (!isNeighbor(map[from], map[to])) {
                 map[from].neighbors.push({
@@ -67,7 +70,11 @@ function readNeighbors(map) {
             }
         })
 
-        rl.on('close', () => resolve(true))
+        rl.on('close', () => {
+            console.log('节点数是', num, '边数是', line)
+            resolve(true)
+
+        })
     })
 }
 
@@ -80,6 +87,16 @@ async function getUciData() {
     const success = await readNeighbors(map)
     return nodes
 }
+
+// getUciData().then(nodes => {
+//     let num = 0
+//     nodes.forEach(node => {
+//         if (node.neighbors.length) {
+//             ++num
+//         }
+//     })
+//     console.log(nodes.length, num)
+// })
 
 module.exports = getUciData
 
