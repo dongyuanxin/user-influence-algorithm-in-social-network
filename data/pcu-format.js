@@ -13,7 +13,7 @@ const { getNode, isNeighbor } = require('./../init/node')
 const nodes = []
 
 function readFeatures() {
-    const file = path.resolve(__dirname, 'pcu.features.txt')
+    const file = path.resolve(__dirname, 'pcu.features.mean.txt')
     const map = {} // 保存了 id -> 节点 的映射关系
 
     return new Promise((resolve) => {
@@ -85,7 +85,7 @@ function readNeighbors(map) {
     })
 }
 
-async function getUciData() {
+async function getPcuData() {
     if (nodes.length) {
         return nodes
     }
@@ -95,5 +95,5 @@ async function getUciData() {
     return nodes
 }
 
-module.exports = getUciData
+module.exports = getPcuData
 
