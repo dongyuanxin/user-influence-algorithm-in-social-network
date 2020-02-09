@@ -1,6 +1,7 @@
 const { GraphNode } = require('./../init/node')
 const { ProportionMatrix } = require('./proportion')
 const { initWeight } = require('./../init/weight')
+const { D } = require('./../constants')
 
 /**
  * 
@@ -64,7 +65,7 @@ function adjust(nodes, maxSteps = 1000, alpha = 1e-4) {
             impact += distribution
         }
 
-        initCache[node.name] = impact
+        initCache[node.name] = impact * D + (1 - D)
     }
     console.log('第一次迭代结果计算完成')
 
@@ -84,7 +85,7 @@ function adjust(nodes, maxSteps = 1000, alpha = 1e-4) {
                 impact += distribution
             }
 
-            cache[node.name] = impact
+            cache[node.name] = impact * D + (1 - D)
         }
         preCache = cache
 
