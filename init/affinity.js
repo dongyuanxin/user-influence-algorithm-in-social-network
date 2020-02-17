@@ -102,11 +102,17 @@ const estimateIndirectAffinity = (function () {
         const neighbors = getCommonNeighbors(u, v)
         let total = 0
         for (const node of neighbors) {
-            const multi = estimateDirectAffinity(u, node) * estimateDirectAffinity(node, v)
+            // const multi = estimateDirectAffinity(u, node) * estimateDirectAffinity(node, v)
+            const multi = Math.sqrt(estimateDirectAffinity(u, node) * estimateDirectAffinity(node, v))
             total += multi
         }
 
-        cache[key] = Math.min(1, Math.sqrt(total))
+        // cache[key] = Math.min(1, Math.sqrt(total))
+        if (!neighbors.length) {
+            cache[key] = 0
+        } else {
+            cache[key] = total / neighbors.length
+        }
         cache[hash(v, u)] = cache[key]
     
         return cache[key]
@@ -134,5 +140,6 @@ function estimateAffinity(u, v, mu = MU) {
 module.exports = {
     estimateDirectAffinity,
     estimateIndirectAffinity,
-    estimateAffinity
+    estimateAffinity,
+    compareSimilarity
 }

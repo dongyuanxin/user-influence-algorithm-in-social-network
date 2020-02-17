@@ -66,6 +66,7 @@ function adjust(nodes, maxSteps = 1000, alpha = 1e-4) {
         }
 
         initCache[node.name] = impact * D + (1 - D)
+        // initCache[node.name] = impact
     }
     console.log('第一次迭代结果计算完成')
 
@@ -73,7 +74,7 @@ function adjust(nodes, maxSteps = 1000, alpha = 1e-4) {
     let preCache = initCache // 上次迭代的结果
     let lastP = 0 // 上次的平均变化率
     while (steps++ < maxSteps) {
-        // console.log('steps:', steps)
+        console.log('steps:', steps)
         const cache = {}
         for (const node of nodes) {
             const { neighbors } = node
@@ -86,6 +87,7 @@ function adjust(nodes, maxSteps = 1000, alpha = 1e-4) {
             }
 
             cache[node.name] = impact * D + (1 - D)
+            // cache[node.name] = impact
         }
         preCache = cache
 
@@ -96,7 +98,7 @@ function adjust(nodes, maxSteps = 1000, alpha = 1e-4) {
         }
 
         let nowP = Math.abs(total - initTotal) / num
-        // console.log('变化率：', lastP, '->', nowP, '; 差别是：', Math.abs(nowP - lastP))
+        console.log('变化率：', lastP, '->', nowP, '; 差别是：', Math.abs(nowP - lastP))
         if (Math.abs(nowP - lastP) <= alpha) {
             break
         }

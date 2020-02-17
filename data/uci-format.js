@@ -4,10 +4,11 @@ const path = require('path')
 const { getNode, isNeighbor } = require('./../init/node')
 
 const nodes = []
-const num = 100000
+// const num = 100000
 
 function readFeatures() {
-    const file = path.resolve(__dirname, `uci.features.${num}.txt`)
+    // const file = path.resolve(__dirname, `uci.features.${num}.txt`)
+    const file = path.resolve(__dirname, `uci.features.txt`)
     const map = {} // 保存了 id -> 节点 的映射关系
 
     return new Promise((resolve) => {
@@ -71,7 +72,7 @@ function readNeighbors(map) {
         })
 
         rl.on('close', () => {
-            console.log('节点数是', num, '边数是', line)
+            // console.log('节点数是', num, '边数是', line)
             resolve(true)
 
         })
